@@ -51,3 +51,20 @@ class UpdateNewsSerializers(serializers.ModelSerializer):
         print(instance)
         print(instance.slug)
         return instance
+
+
+class ListNewsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = ['title', 'article', 'category', 'author', 'slug', 'created_at']
+
+
+class RetrieveNewsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = ['title', 'article', 'category', 'author', 'slug']
+
+
+class DestroyNewsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = News
