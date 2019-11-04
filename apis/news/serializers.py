@@ -6,7 +6,10 @@ from apis.news.models import News
 class CreateNewsSerializers(serializers.ModelSerializer):
     class Meta:
         model = News
-        fields = 'title', 'article', 'category'
+        fields = 'title', 'article', 'category', 'cover_image'
+        extra_kwargs = {
+            'author':{'required':False},
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,6 +24,7 @@ class CreateNewsSerializers(serializers.ModelSerializer):
         print(validate_data)
         slug = slugify(title)
         author = self.author
+        print(author)
         print(validate_data)
         news = News.objects.create(**validate_data, slug=slug, author = author)
         print(news)
@@ -31,7 +35,7 @@ class CreateNewsSerializers(serializers.ModelSerializer):
 class UpdateNewsSerializers(serializers.ModelSerializer):
     class Meta:
         model = News
-        fields = ['title', 'article', 'category']
+        fields = ['title', 'article', 'category', 'author']
     
     # def get_queryset(self):
     #     print('------------------------------------------')
