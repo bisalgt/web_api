@@ -33,3 +33,8 @@ models fields are related to database
 
     USERNAME_FIELD = "name" // "email also " -- but should be unique
 
+# setting the environment variables using set variablename=value -- using cmd
+# setting the environment variable using .env file which contains key and value with python-dotenv installation
+            from dotenv import load_dotenv
+                load_dotenv()
+                print(os.getenv('name')) # overiding the system variables using override=True in load_dotenv(override=True)// look in documentation

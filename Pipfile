@@ -10,6 +10,7 @@ django = "==2.2.2"
 djangorestframework = "==3.10"
 djangorestframework-simplejwt = "*"
 pillow = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
