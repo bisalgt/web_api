@@ -21,6 +21,8 @@ class IsNewsAuthor(permissions.BasePermission):
         print('----------------------')
         print(view)
         print('-----xxxxxxxxxx-----------------')
+        print(dir(view))
+        print('-----xxxxxxxxxx-----------------')
         print(view.get_object().author)
         print('-------xxxxxxxxxxxxxxx---------------')
         print(request.user == view.get_object().author)
