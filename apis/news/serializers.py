@@ -72,3 +72,11 @@ class RetrieveNewsSerializers(serializers.ModelSerializer):
 class DestroyNewsSerializers(serializers.ModelSerializer):
     class Meta:
         model = News
+
+
+class RequestUserNewsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = ['title', 'article', 'category', 'author']
+    
+    

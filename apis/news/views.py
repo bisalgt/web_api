@@ -7,10 +7,12 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import JsonResponse, HttpResponse, Http404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 from helpers.permissions import IsNewsCreator, IsNewsAuthor
 from apis.news.serializers \
-        import CreateNewsSerializers, UpdateNewsSerializers, ListNewsSerializers, RetrieveNewsSerializers, DestroyNewsSerializers
+        import CreateNewsSerializers, UpdateNewsSerializers, ListNewsSerializers, RetrieveNewsSerializers, DestroyNewsSerializers, RequestUserNewsSerializers
 from apis.news.models import News
 
 
@@ -141,38 +143,47 @@ def fashions_news_list(request):
         return HttpResponse(f"<h1>{e}</h1>")
 
 
-def request_user_created_news(request):
-    if request.user.is_authenticated:
-        try:
-            print(dir(request))
-            news = News.objects.filter(author=request.user)
-            print(news)
-            news_dict = {n:{news[n].pk:news[n].title} for n in range(len(news))}
-            if news_dict:
-                return JsonResponse(news_dict)
-            else:
-                raise Exception(f'NO ANY  NEWS CREATED BY {request.user}')
-        except Exception as e:
-            return HttpResponse(f"<h1>{e}</h1>")
-    else:
-        return HttpResponse(f"You Need to login First <a href='http://127.0.0.1:8000/api/tokens/'> Login </a>")
+# def request_user_created_news(request):
+#     if request.user.is_authenticated:
+#         try:
+#             print(dir(request))
+#             news = News.objects.filter(author=request.user)
+#             print(news)
+#             news_dict = {n:{news[n].pk:news[n].title} for n in range(len(news))}
+#             if news_dict:
+#                 return JsonResponse(news_dict)
+#             else:
+#                 raise Exception(f'NO ANY  NEWS CREATED BY {request.user}')
+#         except Exception as e:
+#             return HttpResponse(f"<h1>{e}</h1>")
+#     else:
+#         return HttpResponse(f"You Need to login First <a href='http://127.0.0.1:8000/api/tokens/'> Login </a>")
 
-class RequestUserListNewsAPIView(ListAPIView):
+# class RequestUserNewsAPIView(ListAPIView):
+#     authentication_class = [JWTAuthentication]
+#     print('-------------')
+#     serializer_class = RequestUserNewsSerializerAPIView
+#     print('-------------')
+#     def get_queryset(self):
+#         try:
+#             print('------------')
+#             print(dir(self))
+#             print(self.request.user)
+#             news = News.objects.filter(author=request.user)
+#             print(news)
+#             news_dict = {n:{news[n].pk:news[n].title} for n in range(len(news))}
+#             if news_dict:
+#                 return JsonResponse(news_dict)
+#             else:
+#                 raise Exception(f'NO ANY  NEWS CREATED BY {self.request.user}')
+#         except Exception as e:
+#             return HttpResponse(f"<h1>{e}</h1>")
+
+class RequestUserNewsAPIView(ListAPIView):
     authentication_class = [JWTAuthentication]
-    print('-------------')
-    serializer_class = False
-    print('-------------')
+    permission_classes = [AllowAny]
+    serializer_class = RequestUserNewsSerializers
     def get_queryset(self):
-        try:
-            print('------------')
-            print(dir(self))
-            print(self.request.user)
-            news = News.objects.filter(author=request.user)
-            print(news)
-            news_dict = {n:{news[n].pk:news[n].title} for n in range(len(news))}
-            if news_dict:
-                return JsonResponse(news_dict)
-            else:
-                raise Exception(f'NO ANY  NEWS CREATED BY {self.request.user}')
-        except Exception as e:
-            return HttpResponse(f"<h1>{e}</h1>")
+        print(self.request.user)
+        return News.objects.all()
+
